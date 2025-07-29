@@ -1,0 +1,363 @@
+(format, column-per-line limit: 119)
+
+~~INTRODUCTION
+
+The synulb programming language is a programming language that I chose its syntax cuz it looks cool.
+It takes in the program file (.syn) and outputs a bytecode file (.dat).
+It then interperets the .json.
+Here is an explanation of what it [will be] is.
+
+~~1.BASICS
+
+An instruction is created using a symbol, a <name>, and contents encased between a colon and a semicolon. 
+An example is the following code:
+
+
+$setup:
+;
+
+
+In this example, the symbol is '$' followed by the <name> 'setup' and an encasing using : and ;, which contains nothing.
+The '$' symbol is used to define (not declare) cFunctions. Here the 'setup' function doesn't need to be declared since 
+$setup is already a declared function in the interperter. It is worth noting that the symbol in an instruction is the 
+actual instruction, and the <name> is simply a parameter for the instruction. The $setup function is used to declare 
+variables, cFunctions, and anything else before the $main function runs. 
+
+A variable or function can be declared using the @ symbol. Then any variable can be defined or modified using the # 
+symbol. In the following example, a variable named 'x' is declared in $setup, and defined as 5 in $main. Indents are 
+used for clarity, even though they are not needed, and can be rewritten as is in figure 2.
+
+        fig. 1
+
+
+$setup:
+    @x:int;
+;
+
+$main:
+    #x:5;
+;
+
+
+        fig. 2
+
+
+$setup:@x:int;;$main:#x:5;;
+
+
+If I were to define a function named add, it wouldn't matter where the definition is. The interperter would read 
+through all function definitions and store them. In the following:'
+
+
+$setup:
+    @add:cFunc;
+;
+
+$add:
+    //Nothing, just this comment!
+;
+
+$main:
+    %add:;
+;
+
+
+'
+the interperter would run the following steps:
+1. Run $setup
+    1a. Declare $add
+2. Define $add
+3. Define $main
+Then, after reading through the code, and only running setup,
+4. Run $main
+    4a. Run $add
+
+The interperter would run the following bytecode:
+[
+    [declare, setup, cFunction],
+    [declare, main, cFunction],
+    [define, setup, None, [
+        [declare, add, cFunction]
+    ]],
+    [call, setup, [None]],
+    [define, add, None, [
+        None
+    ]]
+    [define, main, None, [
+        [call, add, [None]]
+    ]],
+    [call, main, [None]]
+]
+
+The starting symbols for a group are defined here:
+@ indecates declaring things like variables and functions
+$ indecates defining a group of code or cFunction
+! indecates built-in functions
+> indecates writing data
+< indecates reading data
+% indecates calling a cFunction
+# indecates defining a declared thing, or changing it 
+^ flag for methods
+& indecates a class method 
+
+The console is looked at as if a file that can be read/written to. The following can be done with this:
+
+
+$setup:
+    // None
+;
+
+$main:
+    >console:"Hello, World!";
+;
+
+
+The byte code for the write function is:
+[write, console, "Hello, World!"]
+
+The !lines function can split a file into lines, and the !input function calls for an input on a new line. This is a 
+simple cat program made using this information:
+
+
+$setup:
+    @text:str;
+;
+
+$main:
+    !input:; // Calls for an input
+    #text:
+        <arg: // Reads from the last line in the console
+            !lines: console, -1;
+        ;
+    ;
+    >console:text;
+;
+
+This uses python indexing.
+
+Using arg as the <name> lets the read command read from whatever the argument is set to. This gives the following 
+bytecode:
+
+
+[
+    [declare, setup, cFunction],
+    [declare, main, cFunction],
+    [define, setup, None, [
+        [declare, text, string]
+    ]],
+    [call, setup, [None]],
+    [define, main, None, [
+        [call, input, [None]],
+        [define, text, None, [
+            [read, argument,[
+                [call, lines, [
+                    console, -1
+                ]]
+            ]]
+        ]]
+        [write, console, text]
+    ]],
+    [call, main, [None]]
+]
+
+
+This clean formating comes from the json library in python, although it would export a little differently. This is 
+how the file looks before it is cleaned up by json:
+
+
+[[declare,setup,cFunction],[declare,main,cFunction],[define,setup,[[declare,text,string]]],[call,setup,[None]],[defin
+e,main,[[call,input,[None]],[define,text,[[read,argument,[[call,lines,[console,-1]]]]]][write,console,text]]],[call
+,main,[None]]]
+
+
+Simple, right?
+
+In the bytecode, there is a list of keywords linked to numbers, to speed up the code.
+It consists of
+
+declare : 0
+define : 1
+setup : 2
+main : 3
+call : 4
+...etc.
+
+~~2.cFunctions
+
+Functio2ns can pass parameters like this:
+
+$add:
+    -{x: int, y: int}
+    !return: x + y;
+;
+
+Since there is a - before the {, it marks it as a peramiter input as opposed to an array. Python type-hints are used 
+here, but they are mandatory.
+
+Since I am used to Object Oriented Programming, I decided to add classes.
+T h e s e  w i l l   b e  c o m b i n e d  w i t h  f u n c t i o n s.
+
+Each function (of which i will call cFunction from now on, the c stands for class) consists of a code object, which
+will be run whenever call is used on a cFunction. This was seen before and allows the cFunction to act perfectly like
+a function. In the previous add cFunction, the code object was
+[
+    define, add, 
+    [
+        [
+            parameters, 
+            [x, integer], 
+            [y, integer]
+        ],
+        [return, [add, x, y]]
+    ], 
+]
+In the next example I will create an add class which has a value, and a method that returns the input to a peramiter
+plus the value stored in the class.
+
+
+$setup:
+    @addClass:cFunc;
+    @inst:addClass;
+;
+
+^addClass:;
+$addClass:
+    -{x: int}
+    @me.value:x;
+
+    &add:
+        -{x: int}
+        !return:me.value + x;
+    ;
+;
+
+$main:
+    #inst:5;
+    >console: 
+        %inst.add:10;
+    ;
+;
+
+
+In this example, the ^addClass:; line flags addClass for methods, basically telling the interperter to look inside 
+the cFunction for methods, so that me.add can be declared using & instead of $. me is this language's version of
+'self' or 'this'. inst is defined as an addClass type, initalized using #inst:5;, which runs addClass' code object.
+Then %inst.add:10; calls the method defined earlier. Here is the python equivelent of this script:
+
+
+addClass: class
+inst: addClass
+
+class addClass:
+    def __init__(x: int):
+        self.value = x
+
+    def add(x: int):
+        return self.value + x
+
+def main():
+    inst = addClass(5)
+    print(
+        inst.add(10)
+    )
+
+if __name__ == '__main__':
+    main()
+
+
+This also means that anytime you create a cFunction it becomes a vaild datatype. It is worth noting that any datatype 
+that you try to make must have a .value and a .fName attribute in order to work as a plain datatype as shown in the 
+next example, note that a returning method called value can be used instead.
+
+
+$setup:
+    @choord1:cFunc;
+    @dot1:choord1;
+
+    @choord2:cFunc;
+    @dot2:choord2;
+;
+
+$choord1: // This creates a choordinate type.
+    -{x: int, y: int}
+    @me.value:{x,y}; // This also forces me.value to be an array of size 2. Only arrays values can be declared and defined on the same line.
+    @me.fName:"choordinate"; // The formal name of the datatype.
+;
+
+$choord2: // This creates a choordinate type.
+    -{x: int, y: int}
+    @me.location:{x,y};
+;
+
+$main:
+    #dot1:{12, 13}; // This works, as it sets the value
+    #dot2:{56, 12}; // This doesn't work, as .value hasn't been declared yet.
+;
+
+
+
+~~3.Datatypes
+Here are a list of built-in datatypes for the language. It is worth noting that $setup and $main are technically vaild
+datatypes, although they should not be used, unless you find some weird quirk in the language. Multiple names may be 
+used for the datatype, where the last name listed is the formal name.
+
+byte / int / integer: A positive 8-bit integer. 0 - 256
+    -- Throws overflow error
+sInt / signedInteger: A signed 8-bit integer. -128 - 127
+long: A positive 32-bit integer. 0 - 4,294,967,295
+    -- Throws overflow error
+sLong / signedLong: A signed 32-bit integer. -2,147,483,648 - 2,147,483,647
+
+array: An array. Stays the same size. Is marked with { and }. Can be created without a variable (as seen with peramiters).
+list: Like an array, but can change size. Is marked with ( and ). Can be created without a variable.
+char: An 8-bit value read as a character. When accsessed, returns a character. Can be written to using a byte or a short string.
+string: A list of chars building text. Limit 1M chars.
+bool / boolean: True/False. Can be created without a variable using ==, >=, <=, >, <, !=, or ~= (closely equal to, within 10 of each other, or 0.2 of each other if >1.).
+
+
+~~4.General Commands
+If statements look like this:
+
+!if:
+    -{x == 5}
+    >console:"X is 5!!!!!!! This is the most joyus day in my life!!!!!";
+;
+
+Loops can be created using functions that call each other.
+
+Forever
+a calls b
+b calls a
+
+OR 
+
+a calls a
+
+While x
+a calls b
+b calls a if x
+
+OR 
+
+a calls a if x
+
+For loop untill c = x 
+a calls b
+b calls a if c is not equal to x 
+
+OR 
+a calls a if c is not equal to x 
+
+
+~~5.Libraries
+
+$setup:
+    !import:math;
+    // You can also use a filename (math.py) or file location is place of the library name 
+;
+
+$main:
+    >console:
+        %math.add: 1, 1;
+    ;
+;

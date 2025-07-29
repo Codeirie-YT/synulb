@@ -1,0 +1,6 @@
+file ::= instuctions EOF
+
+instuctions ::= instuction+
+instuction ::= symbol name ':' instuction* ';'
+
+symbol ::= '@' | '$' | '!' | '>' | '<' | '%' | '#' | '^' | '&'
