@@ -1,6 +1,9 @@
 # Compiles the program into bytecode
 # this is such bad code
 
+from sys import argv
+argv = argv[1:]
+
 class token:
     def __init__(self, _type, value):
         self.type = _type
@@ -126,8 +129,11 @@ def lexer(program):
     return tokens
 
 class parser:
-    def __init__():
+    def __init__(self):
         pass
+
+    def parse(program):
+        return program
 
 
 
@@ -137,40 +143,19 @@ def idx(value, sub):
     except ValueError:
         return None
 
-def main():
-    program = '''
-$setup:
-    @choord1:cFunc;
-    @dot1:choord1;
-    @choord2:cFunc;
-    @dot2:choord2;
-;
+def main(pgm):
 
-$choord1: // This creates a choordinate type.
-    -{x: int, y: int}
-    @me.value:{x,y}; // This also forces me.value to be an array of size 2. Only arrays values can be declared and defined on the same line.
-    @me.fName:"choordinate"; // The formal name of the datatype.
-;
-
-$choord2: // This creates a choordinate type.
-    -{x: int, y: int}
-    @me.location:{x,y};
-;
-
-$main:
-    #dot1:{12, 13}; // This works, as it sets the value
-    #dot2:{56, 12}; // This doesn't work, as .value hasn't been declared yet.
-;
-'''
-
-    program = '\n'.join(x[:idx(x, '//')] for x in program.splitlines())
+    #pgm = '\n'.join(x[:idx(x, '//')] for x in pgm.splitlines())
 
     # lexer testing
     #z = (f'{x.type}, {x.value}' for x in lexer(program))
     #for y in list(z):
     #    print(y)
 
-    print(parser.parse(lexer(program)))
+    p = parser()
+
+    #print(p.parse(lexer(pgm)))
+    print(pgm)
 
 if __name__ == '__main__':
-    main()
+    main(argv[0])

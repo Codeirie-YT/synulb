@@ -29,6 +29,14 @@ def writeBC(filename: str, bytecode: list):
 def readSyn(filepath: str):
     '''Reads a .syn file.'''
     try:
+        if filepath[filepath.index('.'):] != '.syn':
+            print(f'That is not a synulb file dumbass!')
+            exit()
+    except ValueError:
+        print(f'That is not a synulb file dumbass!')
+        exit()
+    
+    try:
         ispath = os.path.exists(os.path.abspath(filepath))
 
         if ispath:
