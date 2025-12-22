@@ -161,8 +161,7 @@ bytecode:
 ]
 
 
-This clean formating comes from the json library in python, although it would export a little differently. This is 
-how the file looks before it is cleaned up by json:
+This formatting is for readability, heres how it would actually look:
 
 
 [[declare,setup,cFunction],[declare,main,cFunction],[define,setup,[[declare,text,string]]],[call,setup,[None]],[defin
@@ -184,7 +183,7 @@ call : 4
 
 ~~2.cFunctions
 
-Functio2ns can pass parameters like this:
+Functions can pass parameters like this:
 
 $add:
     -{x: int, y: int}
@@ -298,21 +297,15 @@ $main:
 
 ~~3.Datatypes
 Here are a list of built-in datatypes for the language. It is worth noting that $setup and $main are technically vaild
-datatypes, although they should not be used, unless you find some weird quirk in the language. Multiple names may be 
-used for the datatype, where the last name listed is the formal name.
+datatypes, although they should not be used. Multiple names may be used for the datatype, where the last name listed 
+is the formal name.
 
-byte / int / integer: A positive 8-bit integer. 0 - 256
-    -- Throws overflow error
-sInt / signedInteger: A signed 8-bit integer. -128 - 127
-long: A positive 32-bit integer. 0 - 4,294,967,295
-    -- Throws overflow error
-sLong / signedLong: A signed 32-bit integer. -2,147,483,648 - 2,147,483,647
-
+int: A 32-bit signed integer.
+uint: A 32-bit unsigned integer.
+char: An 8-bit unsigned integer.
 array: An array. Stays the same size. Is marked with { and }. Can be created without a variable (as seen with peramiters).
-list: Like an array, but can change size. Is marked with ( and ). Can be created without a variable.
-char: An 8-bit value read as a character. When accsessed, returns a character. Can be written to using a byte or a short string.
-string: A list of chars building text. Limit 1M chars.
-bool / boolean: True/False. Can be created without a variable using ==, >=, <=, >, <, !=, or ~= (closely equal to, within 10 of each other, or 0.2 of each other if >1.).
+string: A list of chars building text.
+bool / boolean: True/False. Can be created without a variable using ==, >=, <=, >, <, !=, or ~= (closely equal to, within 10 of each other, or 0.2 of each other if <1.).
 
 
 ~~4.General Commands
@@ -323,30 +316,19 @@ If statements look like this:
     >console:"X is 5!!!!!!! This is the most joyus day in my life!!!!!";
 ;
 
-Loops can be created using functions that call each other.
+Loops have similar syntax.
 
-Forever
-a calls b
-b calls a
+// Prints all numbers 0 - 9
+@i:int;
+#i:0;
 
-OR 
+!for: 
+    -{i, i < 10}
+    >console: i;
+    #i: i + 1;
+;
 
-a calls a
-
-While x
-a calls b
-b calls a if x
-
-OR 
-
-a calls a if x
-
-For loop untill c = x 
-a calls b
-b calls a if c is not equal to x 
-
-OR 
-a calls a if c is not equal to x 
+The first argument is the variable you are using, and the second is the condition to end the loop.
 
 
 ~~5.Libraries

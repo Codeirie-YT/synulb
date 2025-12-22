@@ -1,8 +1,9 @@
-'''Helper file for Synulb.'''
+'''File Read/Write library for Synulb.'''
 # Libraries
 import sys, os, pickle
 
-# Eliminates the .pyc file
+# Eliminates the .pyc file.
+# Or at least it *should*
 sys.dont_write_bytecode = True
 # Full path is needed to access files. Otherwise, a FileNotFoundError will be raised.
 _path = os.getcwd()
@@ -30,10 +31,11 @@ def readSyn(filepath: str):
     '''Reads a .syn file.'''
     try:
         if filepath[filepath.index('.'):] != '.syn':
-            print(f'That is not a synulb file dumbass!')
+            print(f'That is not a synulb file!')
             exit()
-    except ValueError:
-        print(f'That is not a synulb file dumbass!')
+    except ValueError as e:
+        print(f'That is not a synulb file!')
+        print(e)
         exit()
     
     try:

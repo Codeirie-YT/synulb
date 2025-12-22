@@ -1,6 +1,16 @@
 file ::= instuctions EOF
 
 instuctions ::= instuction+
-instuction ::= symbol name ':' instuction* ';'
+instuction ::= symbol name ':' instuction* | '-{' (item)? (',' item)* '}' instruction* | (item)? (',' item)* ';'
 
 symbol ::= '@' | '$' | '!' | '>' | '<' | '%' | '#' | '^' | '&'
+
+expression ::= item ('+' | '-' | '*' | '/' | '-&' | '~&' | '~' | '|')
+
+name ::= text 
+item ::= instruction | '"' text '"' | integer | expression
+
+text ::= (.*)
+integer ::= digit digit*
+
+digit ::= '0' | '1' | '2' ... | '9'

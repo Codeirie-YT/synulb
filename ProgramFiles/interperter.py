@@ -4,14 +4,14 @@
 import sys
 from time import sleep
 import time
-import importlib
-import pickle
+#import importlib
+#import pickle
 
 # This allows for loops. The recursion limit is the number of times an 'infinite' loop can run before crashing.
 if sys.maxsize > 2**32: # If your python is running in 64-bits
-    sys.setrecursionlimit(2*64)
+    sys.setrecursionlimit((2*64)-1)
 elif sys.maxsize == 2**32: # If you python is running in 32-bits
-    sys.setrecursionlimit(2*32)
+    sys.setrecursionlimit((2*32)-1)
 elif sys.maxsize < 2**32: # if your computer is from 1999
     sys.setrecursionlimit(1000000)
 
@@ -30,17 +30,37 @@ class error:
 class cFunction:  # Class function
     def __init__(self, name: str, code: list, value: any, methods: dict):
         self.name = name
-        self.code = code
-        self.value = value
-        self.methods = methods
+        self.code = code # Bytecode 
+        self.value = value # Value for datatypes
+        self.methods = methods # Methods for classes
+
+class externalFunction:  # create a builtin function that runs python code
+    def __init__(self, name: str, code: str):
+        self.name = name
+        self.code = code # python code
 
 class Integer(cFunction):
-    def __init__(self, name: str, code: list, value: int, methods: dict):
-        super.__init__(name=name, code=code, value=value, methods=methods)  # am i doing this right
-        
+    def __init__(self, value: str = '0x0', refcount: int = 0):
+        self.name = '8int'
+        self.code = None # None, it's written here in python.
+        self.value = value
+        self.refcount = refcount
 
-    def readByte(self):
-        return int(self.value, base=2)
+    def __int__(self):
+        '''Returns a python integer for the value.'''
+        return int(self.value, 16)
+    
+    def increment(self):
+        self.value = hex(self.__int__() + 1)
+
+    def decrement(self):
+        self.value = hex(self.__int__() - 1)
+
+    def __del__(self): # I have no idea what I was doing here
+        #from random import randint
+        #if refcount > 0:
+        #  exec(f'{''.join((chr(randint(65, 90)) for x in [0] * 20))} = {self}') # WHAT DOES THIS MEAN????
+        pass
     
 def lineInterperet(line):
     global cFunction
@@ -197,4 +217,6 @@ def main():
     Interperet(hello_world, exeTime, start)
 
 if __name__ == '__main__':
-    main()
+    #main()
+    x = Integer('0x05')
+    print(x.__int__())
