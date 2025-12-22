@@ -59,6 +59,8 @@ def lexer(program) -> list:
     ctoken = ''
     tokens = []
     inString = False
+    print(str(program))
+    program = program.replace('\r\n', '\n').replace('\r', '\n')
     program = '\n'.join(x[:idx(x, '//')] for x in program.splitlines())
     #print(program)
 

@@ -25,7 +25,7 @@ def runFile(path: str, args):
     global isPosix
     if os.name == 'nt':
         os.system(f'py \"{path}\" {args}')
-    elif os.name == 'posix':  # vs code wont stop screaming my ears hurt make it fucking stop
+    elif os.name == 'posix':  # vs code wont stop screaming my ears hurt make it stop
         os.system(f'python3 \"{path}\" {args}')
     elif os.name == 'java':
         print("Sorry, but JPython is not a supported interperter for Synulb. Try using the CPython interperter instead.")
@@ -38,6 +38,7 @@ def main():
         _path = argv[0]
 
     file = fileio.readSyn(_path)
+
     if file == 0:
         print('Something went wrong. Your program could not be loaded but returned no error. Please try again.')
         runFile(os.path.join(get_script_dir(), 'main.py'), '')
@@ -58,9 +59,12 @@ def main():
         p = parser()
         s = timer()
         #print(lexer(file.read()))
-        compileSYN = lambda x: p.parse(lexer(x))
 
-        print(compileSYN(file.read()))
+        compileSYN = lambda x: lexer(x)
+        for x in compileSYN(file.read()):
+            print(x)
+
+        #print(compileSYN(file.read()))
 
         print(f'Compiling finished in {(timer() - s) / 1000000} ms')
 

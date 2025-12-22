@@ -4,6 +4,7 @@ import sys, os, pickle
 
 # Eliminates the .pyc file.
 # Or at least it *should*
+# It doesnt. Waaaa.
 sys.dont_write_bytecode = True
 # Full path is needed to access files. Otherwise, a FileNotFoundError will be raised.
 _path = os.getcwd()
@@ -42,9 +43,12 @@ def readSyn(filepath: str):
         ispath = os.path.exists(os.path.abspath(filepath))
 
         if ispath:
+            print("Path Exists.")
+            print(os.path.abspath(filepath))
             return open(os.path.abspath(filepath))
         else:
             if 'win' in sys.platform:
+                #print(os.path.abspath(os.path.join(os.environ.get('PATH'), filepath)))
                 return open(os.path.abspath(os.path.join(os.environ.get('PATH'), filepath)))
             else:
                 raise FileNotFoundError
