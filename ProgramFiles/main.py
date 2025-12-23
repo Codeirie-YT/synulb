@@ -1,6 +1,6 @@
 # Runs the compiler and bytecode interperter
 
-import sys, fileio, os, inspect
+import sys, fileio, os, inspect, helper
 from time import perf_counter_ns as timer
 
 argv = sys.argv[1:]
@@ -31,7 +31,7 @@ def runFile(path: str, args):
         print("Sorry, but JPython is not a supported interperter for Synulb. Try using the CPython interperter instead.")
 
 def main():
-    fileio.boot()
+    helper.boot()
     if argv == []:
         _path = input('Please enter the path to your program (.syn)\n>>> ')
     else:
@@ -55,7 +55,8 @@ def main():
 
         #runFile(compiler, f'"{file.read()}"')
 
-        from compiler import parser, lexer
+        from compiler import parser, lexer, compileTOPLEVEL
+        from interperter import Interperet
         p = parser()
         s = timer()
         #print(lexer(file.read()))
@@ -64,10 +65,15 @@ def main():
         #for x in compileSYN(file.read()):
         #    print(x)
 
-        compileSYN = lambda x: p.parse(lexer(x))
-        print(compileSYN(file.read()))
+        compileSYN = lambda x: compileTOPLEVEL(p.parse(lexer(x)))
+        compiledBC = compileSYN(file.read())
+        #print(compiledBC)
 
         print(f'Compiling finished in {(timer() - s) / 1000000} ms')
+        print('> Executing...\x1b[0m')
+
+        Interperet(compiledBC, False, 0)
 
 if __name__ == '__main__':
     main()
+

@@ -62,6 +62,3 @@ def readSyn(filepath: str):
         return 0
     
 
-def boot():
-    import datetime
-    print(f'SYNULB VERSION 1.0.0 -- {sys.platform} -- {datetime.datetime.now()}')

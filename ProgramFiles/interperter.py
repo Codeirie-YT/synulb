@@ -115,6 +115,8 @@ def lineInterperet(line):
                 case 'console':
                     if type(data) == str:
                         sys.stdout.write(data)
+                    elif type(data) == list:
+                        sys.stdout.write(data[0])
 
                 case _:
                     pass

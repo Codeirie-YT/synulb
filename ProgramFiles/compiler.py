@@ -241,7 +241,45 @@ class parser:
 
         elif '{comma}' in values: # oh :( is it there a function?
             # yay!
-            pass
+            # we need to make a list of all the arguments
+
+            # Current Argument
+            carg = []
+            # Index
+            i = -1
+            # Start of the current argument
+            start = 0
+            # Current token
+            ctoken = None
+            while '{comma}' in values:
+                if '{comma}' in values:
+                    i += 1
+                    ctoken = group[2]
+
+                    if ctoken.value == '{comma}':
+                        group[2][start] = carg
+                        del group[2][start + 1: i + 1] # This also deletes the comma
+                        i = start # Adjust idx now that the list is shifted back
+                        start += 1 # The argument is collaped into a singular list
+                        values = {t.value for t in group[2]} # Recalibrate
+
+                        if start == len(group[2]):
+                            break
+                    else:
+                        if type(ctoken) == token: # Ignores a prevous argument
+                            if ctoken.type == '<str>':
+                                carg.append(ctoken.value)
+                            else:
+                                carg.append(ctoken)
+        else:
+            if group[2] != []:
+                if group[2][0].type == '<str>':
+                    group[2] = [group[2][0].value]
+                else:
+                    group[2] = [group[2]] 
+                    # The {comma} parser groups arguments in a list regardless of length, so this is neesesdsdd need edsed yeah
+            else:
+                group[2] = [group[2]] 
         return group
 
     
@@ -288,6 +326,62 @@ class parser:
 
         return self.pgm
 
+def compileTOPLEVEL(parsed) -> list:
+    bytecode = [
+        ['declare', 'setup', 'cFunction'],
+        ['declare', 'main', 'cFunction']
+    ]
+    
+    # These tell if the call setup and call main are in the bytecode
+    setupRan = False
+    mainRan = False
+    for group in parsed:
+        if type(group) == token:
+            if group.type == '<EOF>':
+                break
+            else:
+                error("InernalError: Stray token in AST.", 1)
+        else:
+            bytecode.append(compileSUBLEVELS(group))
+
+            if [bytecode[-1][0], bytecode[-1][1]] == ['define', 'setup']:
+                bytecode.append(['call', 'setup', [None]])
+                setupRan = True
+            elif [bytecode[-1][0], bytecode[-1][1]] == ['define', 'main']:
+                bytecode.append(['call', 'main', [None]])
+                mainRan = True
+
+    if not setupRan:
+        bytecode.append(['call', 'setup', [None]])
+        warn("NotFoundWarning: The 'setup' cFunc is missing.")
+    
+    if not mainRan:
+        bytecode.append(['call', 'main', [None]])
+        warn("NotFoundWarning: The 'main' cFunc is missing.")
+
+    return bytecode
+
+        
+def compileSUBLEVELS(group) -> list:
+    bytecode = []
+
+    if group[0] == '{defcFunc}': # cFunction definitons
+        name = group[1][0].value
+        args = None
+        if group[2] != [[]]:
+            contents = list(compileSUBLEVELS(x) for x in group[2])
+        else:
+            contents = []
+
+        group = ['define', name, args, contents]
+
+    elif group[0] == '{wrt}': # write
+        to = group[1][0].value
+        data = group[2]
+
+        group = ['write', to, data]
+
+    return group
 
 def idx(value, sub):
     try:

@@ -9,7 +9,19 @@ To make a proposal on how this programming language should be, (although that re
 
 
 You must run Installer.py when you first download Synulb. Everytime you change the file location it has to run too.
+The Installer currently only works on windows.
 
 To run a synulb program (after running Installer.py), simply run:
 
 synulb <filename>
+
+Or just type synulb and it will prompt you for the filename.
+
+So far, only the hello world program works:
+
+$setup:
+;
+
+$main:
+    >console: "Hello, World!";
+;
