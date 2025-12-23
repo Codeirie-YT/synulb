@@ -43,8 +43,8 @@ def readSyn(filepath: str):
         ispath = os.path.exists(os.path.abspath(filepath))
 
         if ispath:
-            print("Path Exists.")
-            print(os.path.abspath(filepath))
+            #print("Path Exists.")
+            #print(os.path.abspath(filepath))
             return open(os.path.abspath(filepath))
         else:
             if 'win' in sys.platform:

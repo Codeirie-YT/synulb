@@ -60,11 +60,12 @@ def main():
         s = timer()
         #print(lexer(file.read()))
 
-        compileSYN = lambda x: lexer(x)
-        for x in compileSYN(file.read()):
-            print(x)
+        #compileSYN = lambda x: lexer(x)
+        #for x in compileSYN(file.read()):
+        #    print(x)
 
-        #print(compileSYN(file.read()))
+        compileSYN = lambda x: p.parse(lexer(x))
+        print(compileSYN(file.read()))
 
         print(f'Compiling finished in {(timer() - s) / 1000000} ms')
 
