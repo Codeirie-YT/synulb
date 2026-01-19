@@ -14,6 +14,7 @@ def error(text: str, exitcode: int):
 
 def warn(text: str):
     print(f'\x1b[38;5;166m{text}')
+    print('\x1b[0m')
 
 def boot():
     import datetime, sys

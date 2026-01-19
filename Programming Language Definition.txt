@@ -3,9 +3,8 @@
 ~~INTRODUCTION
 
 The synulb programming language is a programming language that I chose its syntax cuz it looks cool.
-It takes in the program file (.syn) and outputs a bytecode file (.dat).
-It then interperets the .json.
-Here is an explanation of what it [will be] is.
+It takes in the program file (.syn) and outputs bytecode. If needed to be exported, it is a .dat file. It then 
+interperets the bytecode. Here is an explanation of what it [will be] is.
 
 ~~1.BASICS
 
@@ -17,11 +16,11 @@ $setup:
 ;
 
 
-In this example, the symbol is '$' followed by the <name> 'setup' and an encasing using : and ;, which contains nothing.
-The '$' symbol is used to define (not declare) cFunctions. Here the 'setup' function doesn't need to be declared since 
-$setup is already a declared function in the interperter. It is worth noting that the symbol in an instruction is the 
-actual instruction, and the <name> is simply a parameter for the instruction. The $setup function is used to declare 
-variables, cFunctions, and anything else before the $main function runs. 
+In this example, the symbol is '$' followed by the <name> 'setup' and an encasing using : and ;, which contains 
+nothing. The '$' symbol is used to define (not declare) cFunctions. Here the 'setup' function doesn't need to be 
+declared since $setup is already a declared function in the interperter. It is worth noting that the symbol in an 
+instruction is the actual instruction, and the <name> is simply a parameter for the instruction. The $setup function 
+is used to declare variables, cFunctions, and anything else before the $main function runs. 
 
 A variable or function can be declared using the @ symbol. Then any variable can be defined or modified using the # 
 symbol. In the following example, a variable named 'x' is declared in $setup, and defined as 5 in $main. Indents are 
@@ -171,15 +170,6 @@ e,main,[[call,input,[None]],[define,text,[[read,argument,[[call,lines,[console,-
 
 Simple, right?
 
-In the bytecode, there is a list of keywords linked to numbers, to speed up the code.
-It consists of
-
-declare : 0
-define : 1
-setup : 2
-main : 3
-call : 4
-...etc.
 
 ~~2.cFunctions
 

@@ -1,6 +1,7 @@
 $setup:
+    @x:int;
 ;
 
 $main:
-    >console: "Hello, World!";
+    #x:5;
 ;

@@ -365,21 +365,31 @@ def compileTOPLEVEL(parsed) -> list:
 def compileSUBLEVELS(group) -> list:
     bytecode = []
 
-    if group[0] == '{defcFunc}': # cFunction definitons
-        name = group[1][0].value
-        args = None
-        if group[2] != [[]]:
-            contents = list(compileSUBLEVELS(x) for x in group[2])
-        else:
-            contents = []
+    match group[0]:
+        case '{defcFunc}': # cFunction definitons
+            name = group[1][0].value
+            args = None
+            if group[2] != [[]]:
+                contents = list(compileSUBLEVELS(x) for x in group[2])
+            else:
+                contents = []
 
-        group = ['define', name, args, contents]
+            group = ['define', name, args, contents]
 
-    elif group[0] == '{wrt}': # write
-        to = group[1][0].value
-        data = group[2]
+        case '{decl}': # THE DELCARATION OF INDEPENDECED
+            name = group[1][0].value
+            group = ['declare', name] + group[2]
 
-        group = ['write', to, data]
+        case '{def}': # THE DEfinition OF INDEPENDECED
+            name = group[1][0].value
+            group = ['define', name, None] + group[2]
+
+        case '{wrt}': # write
+            to = group[1][0].value
+            data = group[2]
+
+            group = ['write', to, data]
+
 
     return group
 

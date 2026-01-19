@@ -74,6 +74,8 @@ def main():
 
         Interperet(compiledBC, False, 0)
 
+        print('\x1b[0m')
+
 if __name__ == '__main__':
     main()
 
