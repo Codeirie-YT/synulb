@@ -34,5 +34,5 @@ Alpha 0.1.6_b           Fixed Installer
 Alpha 0.1.7             I ADDED VARIABLES!
 Workflow Alpha 0.1.7_b  Make Workflow for pipline
 Workflow Alpha 0.1.7_c  Disable flake8 and the .txt install
-Alpha 0.1.7_d           Made version numbers make sence.
+Alpha 0.1.7_b           Made version numbers make sence.
 '''

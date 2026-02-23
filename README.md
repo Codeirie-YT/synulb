@@ -27,7 +27,7 @@ $main:
 ;
 
 
-MOST RECENT UPDATE: Alpha 0.1.7_d
+MOST RECENT UPDATE: Alpha 0.1.7_b
 
 This update doesn't change anything, it just adds numbers to each version.
 Here are those numbers:
@@ -54,6 +54,6 @@ Workflow Alpha 0.1.7_b  Make Workflow for pipline
 
 Workflow Alpha 0.1.7_c  Disable flake8 and the .txt install
 
-Alpha 0.1.7_d           Made version numbers make sence.
+Alpha 0.1.7_b           Made version numbers make sence.
 
 (i have to space lines out because github is ignoring the linebreaks for some reason)
