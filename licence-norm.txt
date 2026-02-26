@@ -11,7 +11,7 @@ That means you are not allowed to sell this software.
 This software is ShareAlike.
 That means that if you fork this software, or create your own modified version of it in anyway, it must use the same licence (Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International).
 
-If you fail to comply with this licence, your rights given are terminated, which means your not allowed to to stuff with this software. (ie: create your own copy/fork it)
+If you fail to comply with this licence, your rights given are terminated.
 
 Please note that all following text is legally binding, since taken directly from the Licence.
 
