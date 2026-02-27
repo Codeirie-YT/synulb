@@ -27,33 +27,14 @@ $main:
 ;
 
 
-MOST RECENT UPDATE: Alpha 0.1.7_b
+Latest major update: 0.1.7 
 
-This update doesn't change anything, it just adds numbers to each version.
-Here are those numbers:
+This update adds variables.
 
-Alpha 0.1.0             FIX-UNTRAKED
+Latest minor update: 0.1.7_b
 
-Alpha 0.1.1             Compiler interface working! Added Swearing.
+This update adds numbers to each update
 
-Alpha 0.1.2             This was done 4 months ago, IDK the changes
+Latest minorest update: 0.1.7_bc
 
-Alpha 0.1.3             Fixed Untracked Files
-
-Alpha 0.1.4             desperatly tried to fix a non-existant bug. sad.
-
-Alpha 0.1.5             MADE A PARSER! IT KINDA WORKS YIPPEE!
-
-Alpha 0.1.6             Working compiler: "Hello, World!"
-
-Alpha 0.1.6_b           Fixed Installer
-
-Alpha 0.1.7             I ADDED VARIABLES!
-
-Workflow Alpha 0.1.7_b  Make Workflow for pipline
-
-Workflow Alpha 0.1.7_c  Disable flake8 and the .txt install
-
-Alpha 0.1.7_b           Made version numbers make sence.
-
-(i have to space lines out because github is ignoring the linebreaks for some reason)
+Added the ref (reference) folder and untacked .vscode.
