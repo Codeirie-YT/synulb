@@ -2,7 +2,7 @@
 A new programming language
 
 
-This language is not complete as it is in v0.1.
+This language is not complete as it is in Alpha v0.1.8_a.
 
 
 To make a proposal on how this programming language should be, (although that really wont do much right now,) create a pull request in the SUP repo. (https://github.com/Codeirie-YT/SynulbUpdateProposals)
@@ -27,7 +27,7 @@ $main:
 ;
 
 
-Latest major update: 0.1.8
+Latest major update: Alpha 0.1.8_a
 
 Added printing vaiables and updated systems
 
