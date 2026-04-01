@@ -6,38 +6,61 @@ from time import sleep
 import time
 from cFuncAndBuiltins import *
 from compiler import token
+from helper import *
 #import importlib
 #import pickle
 
-# This allows for loops. The recursion limit is the number of times an 'infinite' loop can run before crashing.
-# update: what the fuck
-if sys.maxsize > 2**32: # If your python is running in 64-bits
-    sys.setrecursionlimit((2*64)-1)
-elif sys.maxsize == 2**32: # If you python is running in 32-bits
-    sys.setrecursionlimit((2*32)-1)
-elif sys.maxsize < 2**32: # if your computer is from 1999
-    sys.setrecursionlimit(1000000)
+
 
 classes = {} # Container for anything defined at runtime
 variables = {} # name: storage
 
-class error:
-    def __init__(self, name: str, text: str):
-        self.name = name
-        self.text = text
+#class error:
+#    def __init__(self, name: str, text: str):
+#        self.name = name
+#        self.text = text
 
-    def __raise__(self):
-        print(f'{self.name}: {self.text}')
-        sleep(2)
-        sys.exit(1)
+#    def __raise__(self):
+#        print(f'{self.name}: {self.text}')
+#        sleep(2)
+#        sys.exit(1)
 
+def getInstanceOf(name):
+    match name:
+        # Every builtin has three names:
+        # The informal name, which is used to actually identify builtins,
+        # The formal name, which is used for errors,
+        # and the specific name, which is completly optional
+        case 'cFunc' | 'cFunction' | 'classFunction':
+            return cFunction(name, None, None, None)
 
+        case 'int' | 'Integer' | 'int32':
+            return Integer(undefined())
+        
+        case 'char' | 'Character' | 'uint8':
+            return Character(undefined())
+
+def getItem(name):
+    if name in classes.keys():
+        return classes[name]
+    elif name in variables.keys():
+        return variables[name]
+    else:
+        error(f'{name} does not exist.', 6)
+
+def itemExists(name):
+    return True if name in classes.keys() or name in variables.keys() else False
+    
 def lineInterperet(line):
+    '''Interperets one line of code'''
+    
     global cFunction
     global instructionPointer
-
-    cmd = line[0]
-    attributes = line[1:]
+    try:
+        cmd = line[0]
+        attributes = line[1:]
+    except TypeError:
+        error('Expected a line of code, got token instead.', 1)
 
     match cmd:
         case 'declare':
@@ -49,45 +72,41 @@ def lineInterperet(line):
 
             match _type:
                 case 'cFunc' | 'cFunction' | 'classFunction':
-                    classes[name] = cFunction(name, None, None, None)
+                    classes[name] = getInstanceOf('cFunc')
 
-                case 'int' | 'Integer':
-                    variables[name] = Integer(undefined())
+                case _:
+                    variables[name] = getInstanceOf(_type)
 
         case 'define':
             name = attributes[0]
             methods = attributes[1] # List of methods if a class
             data = attributes[2:]
 
-            if not name in classes.keys() and not name in variables.keys():
-                error('NotFoundError', f'Tried to define \'{name}\', which doesn\'t exist.')
+            if not itemExists(name):
+                error(f'Tried to define \'{name}\', which doesn\'t exist.', 6)
             
-            try:
-                if not name in classes.keys():
-                    c = type(variables[name])
-                else:
-                    c = type(classes[name])
-                match c:
-                    case _ if c is cFunction:
-                        classes[name].code = data
+            if not name in classes.keys():
+                c = type(variables[name])
+            else:
+                c = type(classes[name])
+            
+            if c is cFunction:
+                classes[name].code = data
 
-                    case _ if c is Integer:
-                        variables[name].value = hex(int(data[0][0].value))
+            elif c is Integer:
+                variables[name].value = hex(int(data[0][0].value))
 
-                    case _:
-                        error('TypeError', f'Tried to define a method of unknown type, {type(classes[name])}')
-                    
-            except KeyError:
-                error('NotFoundError', f'Tried to define \'{name}\', which doesn\'t exist.')
+            else:
+                error(f'Tried to define a method of unknown type, {type(classes[name])}', 3)
 
         case 'call':
             name = attributes[0]
             peramiters = attributes[1]
 
             if not classes[name]:
-                error('NotFoundError', 'Tried to call a cFunc that doesn\'t exist.')
+                error('Tried to call a cFunc that doesn\'t exist.', 6)
             elif type(classes[name]) != cFunction:
-                error('TypeError', f'{type(classes[name])} type is not callable.')
+                error(f'{type(classes[name])} type is not callable.', 3)
             
             cFuncCall: cFunction = classes[name]
             if cFuncCall.code and cFuncCall.code != [[]]:
@@ -101,8 +120,27 @@ def lineInterperet(line):
                 case 'console':
                     if type(data) == str:
                         sys.stdout.write(data)
+
+                    elif type(data) == token: # oh boy
+                        match data.type:
+                            case '<word>':
+                                lineInterperet(['write', 'console', getItem(data.value)])
+                            case _:
+                                error(f'Expected a printable object when writing to the console, instead got a token of type {data.type} and a value {data.value}', 1)
+
                     elif type(data) == list:
-                        sys.stdout.write(data[0])
+                        for item in data:
+                            lineInterperet(['write', 'console', item])
+
+                    elif type(data) == Integer:
+                        sys.stdout.write(str(data.__int__()))
+
+                    elif type(data) == Character:
+                        sys.stdout.write(data.__char__())
+
+                    else:
+                        print(data)
+                        sleep(10)
 
                 case _:
                     pass
@@ -120,12 +158,12 @@ def lineInterperet(line):
             if builtins[cmd]:
                 exec(builtins[cmd])
                 return 0
-            error('InstructionError', 'Instruction doesn\'t exist.')
+            error('Instruction doesn\'t exist.', 6)
 
 
 def Interperet(bytecode: list, clock, start):
-    if type(bytecode) == tuple:
-        error("IOERROR", "Error occured when trying to read .dat (bytecode) file.")
+    #if type(bytecode) == tuple:
+    #    error("IOERROR", "Error occured when trying to read .dat (bytecode) file.")
     global instuctionPointer
     instructionPointer = 0
 

@@ -88,6 +88,8 @@ The interperter would run the following bytecode:
     [call, main, [None]]
 ]
 
+Do note that the bytecode presented here is wrong, as the way I made the compiler causes it to have many nested lists.
+
 The starting symbols for a group are defined here:
 @ indecates declaring things like variables and functions
 $ indecates defining a group of code or cFunction

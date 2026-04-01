@@ -27,14 +27,18 @@ $main:
 ;
 
 
-Latest major update: 0.1.7 
+Latest major update: 0.1.8
 
-This update adds variables.
+Added printing vaiables and updated systems
 
-Latest minor update: 0.1.7_b
+Example program for this version:
 
-This update adds numbers to each update
+$setup:
+    @age: int;
+;
 
-Latest minorest update: 0.1.7_bc
-
-Added the ref (reference) folder and untacked .vscode.
+$main:
+    #age: 5;
+    >console: "The age of Billy is...";
+    >console: age;
+;

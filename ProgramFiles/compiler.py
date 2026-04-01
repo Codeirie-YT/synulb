@@ -228,15 +228,19 @@ class parser:
 
                         end = i
 
-                        group[2][start] = self.groupParse(group[2][start:end+1], False)
-                        del group[2][start+1:end+1]
+                        # start and end are the exact pos of the <startsym> and {semi}
+
+                        group[2][start] = self.groupParse(group[2][start:end+1], False) # what was at <startsym> is now the parsed group
+                        del group[2][start+1:end+1] # we delete the tokens since they are useless
+
 
                         i = start + 1
 
                     except IndexError:
-                        error("SyntaxError: The start or end of a group is missing.", 2)
+                        error("The start or end of a group is missing.", 2)
 
-                    if i == len(group) - 2:
+                    # All groups are found when there are no more <startsym> in types
+                    if '<startsym>' not in {t.type for t in group[2] if type(t) != list}:
                         agf = True
 
         elif '{comma}' in values: # oh :( is it there a function?
@@ -319,7 +323,7 @@ class parser:
                     self.p = start + 1
 
                 except IndexError:
-                    error("SyntaxError: The start or end of a group is missing.", 2)
+                    error("The start or end of a group is missing.", 2)
 
                 if self.p == len(self.pgm) - 1:
                     agf = True
@@ -335,12 +339,12 @@ def compileTOPLEVEL(parsed) -> list:
     # These tell if the call setup and call main are in the bytecode
     setupRan = False
     mainRan = False
-    for group in parsed:
+    for group in parsed: # for every major group (ex: setup, main, flags)
         if type(group) == token:
             if group.type == '<EOF>':
                 break
             else:
-                error("InernalError: Stray token in AST.", 1)
+                error("Stray token in AST.", 1)
         else:
             bytecode.append(compileSUBLEVELS(group))
 
@@ -365,9 +369,16 @@ def compileTOPLEVEL(parsed) -> list:
 def compileSUBLEVELS(group) -> list:
     bytecode = []
 
+    if type(group) == token:
+        return group
+
     match group[0]:
         case '{defcFunc}': # cFunction definitons
             name = group[1][0].value
+            '''
+            At this point, cFuncs are structured like this:
+            ['defcFunc', [<word> (name)], [list of groups]]
+            '''
             args = None
             if group[2] != [[]]:
                 contents = list(compileSUBLEVELS(x) for x in group[2])

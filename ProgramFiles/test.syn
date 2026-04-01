@@ -1,7 +1,9 @@
 $setup:
-    @x:int;
+    @age: int;
 ;
 
 $main:
-    #x:5;
+    #age: 5;
+    >console: "The age of Billy is...";
+    >console: age;
 ;

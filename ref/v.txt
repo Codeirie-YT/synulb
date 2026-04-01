@@ -15,3 +15,4 @@ Alpha 0.1.7_b           Made version numbers make sence.
 Alpha 0.1.7_ba          fix formatting
 Alpha 0.1.7_bb          fix error in naming
 Alpha 0.1.7_bc          Remove .vscode and add ref
+Alpha 0.1.8             Added printing vaiables and updated systems
