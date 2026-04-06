@@ -17,4 +17,4 @@ Alpha 0.1.7_bb          fix error in naming
 Alpha 0.1.7_bc          Remove .vscode and add ref
 Alpha 0.1.8             Added printing vaiables and updated systems
 Alpha 0.1.8_a           Updated version no. and fixed formatting issue
-
+Alpha 0.1.8_ab          Added Synulb as a language in github
