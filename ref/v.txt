@@ -1,4 +1,4 @@
-Versions as per this update (14):
+Versions as per this update (16):
 
 Alpha 0.1.0             FIX-UNTRACKED ASDFSDAFSDFS
 Alpha 0.1.1             Compiler interface working! Added Swearing.
@@ -16,3 +16,5 @@ Alpha 0.1.7_ba          fix formatting
 Alpha 0.1.7_bb          fix error in naming
 Alpha 0.1.7_bc          Remove .vscode and add ref
 Alpha 0.1.8             Added printing vaiables and updated systems
+Alpha 0.1.8_a           Updated version no. and fixed formatting issue
+
