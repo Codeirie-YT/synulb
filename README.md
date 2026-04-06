@@ -50,6 +50,6 @@ Latest minor update: Alpha 0.1.8_a
 
 Updated version no. and fixed formatting issue
 
-Latest minorest update: Alpha 0.1.8_ab
+Latest minorest update: Alpha 0.1.8_ac
 
-Added synulb as a language in github
+Undid last update since it was stupid
