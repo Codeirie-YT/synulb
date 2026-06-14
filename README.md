@@ -1,7 +1,8 @@
 # synulb
 A new programming language
 
-This is the nightly copy of this version. It is identical to the full version.
+This is the "full version" of Nightly Alpha v0.1.8_ba. It purely exists to bring this up-to-date with Alpha v0.1.8_b
+It is a nightly build, so be warned.
 This language is not complete as it is in Alpha v0.1.8_ba.
 
 
