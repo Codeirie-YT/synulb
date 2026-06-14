@@ -118,10 +118,10 @@ file locaton.
         case 'nt':
             paragraph.setText("Installing SYNULB FOR WINDOWS...")
             sleep(2.5)
-            #os.system(f'mkdir "C:\\SYNULBBAT"')
-            #os.system(f'(echo @echo off) > "C:\\SYNULBBAT\\synulb.bat"')
-            #os.system(f'(echo py "{get_script_dir()}\\ProgramFiles\\main.py" %*) >> "C:\\SYNULBBAT\\synulb.bat"')
-            #os.system(f'powershell -Command "[System.Environment]::SetEnvironmentVariable(\'Path\', $env:Path + \';C:\SYNULBBAT\', [System.EnvironmentVariableTarget]::User)"')
+            os.system(f'mkdir "C:\\SYNULBBAT"')
+            os.system(f'(echo @echo off) > "C:\\SYNULBBAT\\synulb.bat"')
+            os.system(f'(echo py "{get_script_dir()}\\ProgramFiles\\main.py" %*) >> "C:\\SYNULBBAT\\synulb.bat"')
+            os.system(f'powershell -Command "[System.Environment]::SetEnvironmentVariable(\'Path\', $env:Path + \';C:\SYNULBBAT\', [System.EnvironmentVariableTarget]::User)"')
             paragraph.setText("> Sucessfully Installed!\nThe command can be found in \"C:\\SYNULBBAT\\synulb.bat\"\nIt has automatically been added to PATH.")
             win.getMouse()
 

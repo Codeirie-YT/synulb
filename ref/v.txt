@@ -21,3 +21,4 @@ Alpha 0.1.8_ab          Added Synulb as a language in github
 Alpha 0.1.8_ac          Undid last update since it was stupid
 Nightly Alpha 0.1.8_b   Updated Installer
 Nightly Alpha 0.1.8_ba  Updated README                                    -- Also has a full release version in main
+Alpha 0.1.8_bc          Reinstated WINDOWS Installation
