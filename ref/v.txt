@@ -1,4 +1,4 @@
-Versions as per this update (18):
+Versions as per this update (20):
 
 Alpha 0.1.0             FIX-UNTRACKED ASDFSDAFSDFS
 Alpha 0.1.1             Compiler interface working! Added Swearing.
@@ -19,4 +19,5 @@ Alpha 0.1.8             Added printing vaiables and updated systems
 Alpha 0.1.8_a           Updated version no. and fixed formatting issue
 Alpha 0.1.8_ab          Added Synulb as a language in github
 Alpha 0.1.8_ac          Undid last update since it was stupid
-Alpha 0.1.8_b
+Nightly Alpha 0.1.8_b   Updated Installer
+Nightly Alpha 0.1.8_ba  Updated README                                    -- Also has a full release version in main

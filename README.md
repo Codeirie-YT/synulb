@@ -1,8 +1,8 @@
 # synulb
 A new programming language
 
-
-This language is not complete as it is in Alpha v0.1.8_a.
+This is the nightly copy of this version. It is identical to the full version.
+This language is not complete as it is in Alpha v0.1.8_ba.
 
 
 To make a proposal on how this programming language should be, (although that really wont do much right now,) create a pull request in the SUP repo. (https://github.com/Codeirie-YT/SynulbUpdateProposals)
@@ -46,10 +46,11 @@ $main:
 ;
 ```
 
-Latest minor update: Alpha 0.1.8_a
+Latest minor update: Alpha 0.1.8_b
 
-Updated version no. and fixed formatting issue
+Updated Installer!
+It has a GUI and linux/posix installation is in testing.
 
-Latest minorest update: Alpha 0.1.8_ac
+Latest minorest update: Alpha 0.1.8_ba
 
-Undid last update since it was stupid
+I forgot to update the README as well so here we are.
