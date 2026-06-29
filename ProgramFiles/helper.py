@@ -22,4 +22,7 @@ def warn(text: str):
 
 def boot():
     import datetime, sys
-    print(f'\x1b[32mSYNULB VERSION ALPHA 0.1.8_AC -- {sys.platform} -- {datetime.datetime.now()}')
+    print(f'\x1b[32mSYNULB VERSION {v().capitalize()} -- {sys.platform} -- {datetime.datetime.now()}')
+
+def v() -> str:
+    return 'Alpha 0.1.8_bc'

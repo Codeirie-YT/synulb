@@ -1,8 +1,7 @@
 # synulb
 A new programming language
 
-
-This language is not complete as it is in Alpha v0.1.8_a.
+This language is not finished. it is in version Alpha 0.1.8_bc
 
 
 To make a proposal on how this programming language should be, (although that really wont do much right now,) create a pull request in the SUP repo. (https://github.com/Codeirie-YT/SynulbUpdateProposals)
@@ -50,6 +49,6 @@ Latest minor update: Alpha 0.1.8_a
 
 Updated version no. and fixed formatting issue
 
-Latest minorest update: Alpha 0.1.8_ac
+Latest minorest update: Alpha 0.1.8_bc
 
-Undid last update since it was stupid
+Reinstated Windows Installation as it was removed for testing.
