@@ -32,6 +32,7 @@ This update fixes argument compilation, adds example programs, and also adds a v
 
 Example program for this version:
 
+```
 $setup:
     // This is for the 0.1.9 update
     @x:int;
@@ -45,6 +46,8 @@ $main:
     #x:10;
     >console:x;
 ;
+```
+
 This version also updates types.
 Prev. major update: Alpha 0.1.8
 
