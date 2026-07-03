@@ -1,0 +1,13 @@
+$setup:
+    // This is for the 0.1.9 update
+    @x:int;
+;
+
+$main:
+    >console:"This command doesn't flush.\n", false;
+    >console:"This command flushes.\n", true;
+    >console:"This command also flushes\n";
+
+    #x:10;
+    >console:x;
+;

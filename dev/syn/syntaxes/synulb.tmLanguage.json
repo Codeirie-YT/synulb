@@ -1,0 +1,64 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "Synulb",
+	"patterns": [
+		{
+			"include": "#strings"
+		},
+		{
+			"include": "#keywords"
+		}
+	],
+	"repository": {
+		"keywords": {
+			"patterns": [
+				{
+					"name": "keyword.control.synulb",
+					"match": "\\b!(if|for|return)\\b"
+				},
+				{
+					"name": "constant.numeric.synulb",
+					"match": "[0-9]+"
+				},
+				{
+					"name": "entity.name.type.synulb",
+					"match": "\\b(Integer|int|int32|Character|char|uint8|iostream|String|str|Float|float)\\b"
+				},
+				{
+					"name": "variable.language.synulb",
+					"match": "(?<![!%\\^&\\$])\\b([a-z]|[A-Z]|_)+\\b"
+				},
+				{
+					"name": "keyword.operator.synulb",
+					"match": "(\\+|\\-|\\*|\\/)"
+				},
+				{
+					"name": "entity.name.section.synulb",
+					"match": "(?<=[@!<>%#^&$!])[^:\r\n]*"
+				},
+				{
+					"name": "comment.line.double-slash.synulb",
+					"match": "^\\s*//.**"
+				},
+				{
+					"name": "support.function.synulb",
+					"match": "(@|\\$|!|<|>|%|#|\\^|&)"
+				}
+
+			]
+		},
+
+		"strings": {
+			"name": "string.quoted.double.synulb",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.synulb",
+					"match": "\\\\."
+				}
+			]
+		}
+	},
+	"scopeName": "source.synulb"
+}

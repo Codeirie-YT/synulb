@@ -1,9 +1,7 @@
 # synulb
 A new programming language
 
-This is the "full version" of Nightly Alpha v0.1.8_ba. It purely exists to bring this up-to-date with Alpha v0.1.8_b
-It is a nightly build, so be warned.
-This language is not complete as it is in Alpha v0.1.8_ba.
+This language is not complete as it is in Alpha v0.1.9.
 
 
 To make a proposal on how this programming language should be, (although that really wont do much right now,) create a pull request in the SUP repo. (https://github.com/Codeirie-YT/SynulbUpdateProposals)
@@ -18,18 +16,37 @@ synulb `<filename>`
 
 Or just type synulb and it will prompt you for the filename.
 
-So far, only the hello world program works:
-
 ```
 $setup:
 ;
 
 $main:
-    >console: "Hello, World!";
+    >console: "Hello, World!\n";
 ;
 ```
+Check out /ref for the versions and for the explanation of the language.
+Check out /dev for the extension (called syn) and the example programs.
 
-Latest major update: Alpha 0.1.8
+Latest major update: Alpha 0.1.9
+This update fixes argument compilation, adds example programs, and also adds a vscode extension!
+
+Example program for this version:
+
+$setup:
+    // This is for the 0.1.9 update
+    @x:int;
+;
+
+$main:
+    >console:"This command doesn't flush.\n", false;
+    >console:"This command flushes.\n", true;
+    >console:"This command also flushes\n";
+
+    #x:10;
+    >console:x;
+;
+This version also updates types.
+Prev. major update: Alpha 0.1.8
 
 Added printing vaiables and updated systems
 
@@ -47,11 +64,3 @@ $main:
 ;
 ```
 
-Latest minor update: Alpha 0.1.8_b
-
-Updated Installer!
-It has a GUI and linux/posix installation is in testing.
-
-Latest minorest update: Alpha 0.1.8_ba
-
-I forgot to update the README as well so here we are.

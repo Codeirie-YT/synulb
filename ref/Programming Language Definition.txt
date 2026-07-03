@@ -335,3 +335,33 @@ $main:
         %math.add: 1, 1;
     ;
 ;
+
+~~6. Internals
+Python does not have a stdio stream, so mergeio() is used to create one. <mergeio> is not inheritive of <cFunction>, 
+so <iostream>, which is inheritive of <cFunction> is used as a wrapper for <mergeio>. This allows iostream to be a 
+first-class type, so console can be used as a general object.
+
+Heres an example of a built-in type:
+
+class null(cFunction):
+    '''No data.'''
+    def __init__(self):
+        super().__init__('null', None, None, None)
+        self.fName = 'Null'
+
+    def __str__(self):
+        return 'null'
+
+Every type contains two sections for methods. Those that can be run inside synulb, and those that are python only. If 
+a method can be run in synulb. A string will be added to mark how it works.
+
+ex:
+
+def add(self, a, b):
+    return a + b
+
+self.methods = [
+    'py|0,int,a|1,int,b' 
+]
+
+0,int,a states that the first argument that is an integer, will be directed to the functions 'a' argument.

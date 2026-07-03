@@ -1,0 +1,8 @@
+$setup:
+    @console: int;
+;
+
+$main:
+    #console: 5;
+    >console: "Hello, World!\n";
+;

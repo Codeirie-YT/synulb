@@ -1,0 +1,3 @@
+$setup:
+    >console: "Hello, World!\n";
+;

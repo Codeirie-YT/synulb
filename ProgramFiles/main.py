@@ -1,8 +1,8 @@
 # Runs the compiler and bytecode interperter
 
-import sys, fileio, os, inspect, helper
+import sys, fileio, os, inspect
 from time import perf_counter_ns as timer
-
+from helper import *
 argv = sys.argv[1:]
 
 if argv:
@@ -28,10 +28,11 @@ def runFile(path: str, args):
     elif os.name == 'posix':  # vs code wont stop screaming my ears hurt make it stop
         os.system(f'python3 \"{path}\" {args}')
     elif os.name == 'java':
-        print("Sorry, but JPython is not a supported interperter for Synulb. Try using the CPython interperter instead.")
+        warn("Sorry, but JPython is not a supported interperter for Synulb. Try using the CPython interperter instead.")
 
 def main():
-    helper.boot()
+    boot()
+    #argv = ["C:\\Users\\#####\\testingSite\\0-1-9test.syn"]
     if argv == []:
         _path = input('Please enter the path to your program (.syn)\n>>> ')
     else:

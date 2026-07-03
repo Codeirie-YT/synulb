@@ -1,5 +1,5 @@
 from helper import *
-
+import os
 class cFunction:  # Class function
     '''A singular object that acts as both a class and a function'''
     def __init__(self, name: str, code: list, value: any, methods: dict):
@@ -10,11 +10,6 @@ class cFunction:  # Class function
         self.methods = methods # Methods for classes
 
 
-class externalFunction:  # create a builtin function that runs python code
-    '''Python code that can be run in synulb'''
-    def __init__(self, name: str, code: str):
-        self.name = name
-        self.code = code # python code
 
 
 # ~~~~~~~~~~ TYPES ~~~~~~~~~~
@@ -23,6 +18,7 @@ class null(cFunction):
     '''No data.'''
     def __init__(self):
         super().__init__('null', None, None, None)
+        self.fName = 'Null'
 
     def __str__(self):
         return 'null'
@@ -30,7 +26,8 @@ class null(cFunction):
 class undefined(cFunction):
     '''No data *yet*. Placeholder for the .value of declared variables but not defined variables.'''
     def __init__(self):
-        super().__init__('undefined', None, None, None)
+        super().__init__('undef', None, None, None)
+        self.fName = 'Undefined'
 
     def __str__(self):
         return 'undefined'
@@ -71,9 +68,33 @@ class Integer(cFunction):
         if type(self.value) in [undefined, null]:
             return self.value
         
-        return int(self.value, 16)
+        return int(self.value, base=16)
     
-class Character:
+    def __str__(self):
+        return str(self.__int__())
+
+class String(cFunction):
+    '''A string'''
+    def __init__(self, value: str = ''):
+        super().__init__('str', None, value, None)
+        self.fName = 'String'
+
+    def __str__(self):
+        return self.value
+    
+class Boolean(cFunction):
+    '''A boolean. Values are in lowercase: true/false'''
+    def __init__(self, value: bool = False):
+        super().__init__('bool', None, value, None)
+        self.fName = 'Boolean'
+
+    def __str__(self):
+        return str(self.value)
+    
+    def __bool__(self):
+        return self.value
+
+class Character(cFunction):
     '''Unsigned 8 bit integer'''
     def __init__(self, value: str = '0x0'):
         super().__init__('char', None, value, None)
@@ -117,3 +138,48 @@ class Character:
             return self.value
         
         return chr(int(self.value, 16))
+    
+    def __str__(self):
+        return self.__char__()
+    
+class iostream():
+    '''fileio stream for >< commands'''
+    def __init__(self, location):
+        self.location = location
+    
+    def write(data, flush):
+        if flush:
+            pass
+        else:
+            pass
+
+class mergeio:
+    '''Alternative to fileio that merges an in and out stream into one.'''
+    def __init__(self, _in, out):
+        self._in = _in
+        self.out = out
+
+        self.write = out.write
+        self.flush = out.flush
+        self.writable = out.writable
+        self.seekable = lambda: _in.seekable() and out.seekable()
+        self.tell = lambda: out.tell() if _in.tell == out._tell else ValueError("Multiple 'tell' lengths returned.")
+        self.read = _in.read
+        self.readable = _in.readable
+        self.readline = _in.readline
+        self.readlines = _in.readlines
+    
+    def close(self):
+        self._in.close()
+        self.out.close()
+
+    def seek(self, offset, whence=os.SEEK_SET):
+        if self.seekable():
+            self._in.seek(offset, whence)
+            self.out.seek(offset, whence)
+
+    def trunicate(self, size=None):
+        self.out.trunicate = size
+
+    def __str__(self):
+        return self.read()

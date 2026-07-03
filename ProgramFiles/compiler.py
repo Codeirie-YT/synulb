@@ -192,12 +192,11 @@ class parser:
         else:
             group[2] = tokens[colonidx+1:-1] # From the colon to the end without the semicolon
 
-        # Parse the sub groups
-        # not yet, we need to know if theres sub groups
-
+        
+        # for functions and control statements
         types = {t.type for t in group[2]}
         values = {t.value for t in group[2]}
-        if '<startsym>' in types:
+        if group[0] == '{defcFunc}' or ((group[1][0] in [])): # if there is code following this
             # ok yeah there is
             # now for sub groups
 
@@ -205,6 +204,9 @@ class parser:
             # All groups found?
             agf = False
             while not agf:
+                # exit if empty
+                if group[2] == []:
+                    break
                 if not agf:
                     try:
                         # Find the start of a group
@@ -243,6 +245,7 @@ class parser:
                     if '<startsym>' not in {t.type for t in group[2] if type(t) != list}:
                         agf = True
 
+        # for attributes
         elif '{comma}' in values: # oh :( is it there a function?
             # yay!
             # we need to make a list of all the arguments
@@ -255,35 +258,81 @@ class parser:
             start = 0
             # Current token
             ctoken = None
+
+            # depth incase there is sub-groups
+            depth = 0
             while '{comma}' in values:
                 if '{comma}' in values:
                     i += 1
-                    ctoken = group[2]
+                    ctoken = group[2][i]
 
-                    if ctoken.value == '{comma}':
+                    if ctoken.type == '<startsym>':
+                        depth += 1
+                    elif ctoken.value == '{semi}':
+                        depth -= 1
+                    elif ctoken.value == '{comma}' and depth == 0:
                         group[2][start] = carg
                         del group[2][start + 1: i + 1] # This also deletes the comma
                         i = start # Adjust idx now that the list is shifted back
                         start += 1 # The argument is collaped into a singular list
-                        values = {t.value for t in group[2]} # Recalibrate
+
+                        # Recalibrate
+                        gv = []
+                        for x in group[2]:
+                            if type(x) is not list:
+                                gv.append(x)
+                        
+                        values = {t.value for t in gv}
 
                         if start == len(group[2]):
                             break
                     else:
-                        if type(ctoken) == token: # Ignores a prevous argument
-                            if ctoken.type == '<str>':
-                                carg.append(ctoken.value)
-                            else:
-                                carg.append(ctoken)
+                        carg.append(ctoken)
+            
+            # the above misses the last item in the list so we gotta get it here
+
+            # find the last item
+            i = -1
+            arg = []
+            lastitemexists = True # there may be no last item
+            while type(arg) is list:
+                if type(arg) is list:
+                    i += 1
+
+                    if i > len(group[2]):
+                        lastitemexists = False
+                    else:
+                        arg = group[2][i]
+
+            if lastitemexists:
+                if type(arg) is token:
+                    if arg.type == '<startsym>':
+                        arg == self.groupParse(arg)
+                    else:
+                        arg = [arg] # for compatablility
+                        group[2][i] = arg
+            
+            # parse subgroups
+            for arg in group[2]:
+                if type(arg[0]) is token:
+                    if arg[0].type == '<startsym>':
+                        arg[0] = self.groupParse(arg[0])
+    
+        # attributes without commas
         else:
-            if group[2] != []:
-                if group[2][0].type == '<str>':
-                    group[2] = [group[2][0].value]
-                else:
-                    group[2] = [group[2]] 
-                    # The {comma} parser groups arguments in a list regardless of length, so this is neesesdsdd need edsed yeah
-            else:
-                group[2] = [group[2]] 
+            # The {comma} parser groups arguments in a list regardless of length, so this is neesesdsdd need edsed yeah
+            group[2] = [group[2]] 
+
+        
+        # Unwrap arguments cuz they are ugly
+        i = -1
+        for arg in group[2]:
+            i += 1
+            if len(arg) == 1:
+                arg = arg[0]
+                group[2][i] = arg
+        
+        
         return group
 
     

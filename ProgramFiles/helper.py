@@ -23,4 +23,4 @@ def boot():
     print(f'\x1b[32mSYNULB VERSION {v().capitalize()} -- {sys.platform} -- {datetime.datetime.now()}')
 
 def v() -> str:
-    return 'Alpha 0.1.8_ba'
+    return 'Alpha 0.1.9'
