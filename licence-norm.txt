@@ -1,10 +1,5 @@
 Please note that this file is not legally binding, but instead describes another file that is legally binding (if I did it right, LICENCE.txt) for Synulb.
 
-
-Credit must be given for this software.
-I dont know if this means that any programs you write in this language need credit, but if it does, I don't care. You don't need credit for .syn programs. Sorce? I wont sue you for that lol.
-But maybe include a link to this repo so people know what your talking about.
-
 This software is non-commericial.
 That means you are not allowed to sell this software.
 
