@@ -1,0 +1,12 @@
+$setup:
+    // This program is meant to test comments, argument compilation, and flushing.
+    // It does this using the write commands
+    // This is for the 0.1.9 update, which also creates the console iostream.
+    // console is a mergeio stream, which means that it is made by combining stdin and stdout.
+;
+
+$main:
+    >console:"This command doesn't flush.\n", false;
+    >console:"This command flushes.\n", true;
+    >console:"This command also flushes\n";
+;

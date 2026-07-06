@@ -1,0 +1,1 @@
+$setup:@a:int;;$main:>console:"Look, I can count!          ";#a:1;>console:a;#a:2;>console:a;#a:3;>console:a;#a:4;>console:a;#a:5;>console:a;;

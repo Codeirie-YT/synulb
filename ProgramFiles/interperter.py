@@ -7,12 +7,17 @@ import time
 from cFuncAndBuiltins import *
 from compiler import token
 from helper import *
+from sys import stdin, stdout
+from io import TextIOWrapper
 #import importlib
 #import pickle
 
+stdout = TextIOWrapper(stdout.buffer, stdout.encoding, line_buffering=False, write_through=False)
 
-
-classes = {} # Container for anything defined at runtime
+classes = {
+    'console': mergeio(stdin, stdout)
+} 
+# Container for anything defined at runtime
 variables = {} # name: storage
 
 #class error:
@@ -39,6 +44,50 @@ def getInstanceOf(name):
         
         case 'char' | 'Character' | 'uint8':
             return Character(undefined())
+        
+        case 'str' | 'String' | 'pyStrWrapper':
+            return String(undefined())
+        
+        case 'bool' | 'Boolean' | 'pyBoolWrapper':
+            return Boolean(undefined())
+        
+        case _:
+            cfunc = getItem(name)
+            return cFunction(f'{name}Instance', cfunc.code, cfunc.value, cfunc.methods)
+
+def getObject(_token):
+    if type(_token) is not token:
+        error(f"Tried to create an object from a token but got {str(_token)} instead.", 1)
+    else:
+        inst = getInstanceOf(_token.type[1:-1])
+        if _token.type == '<bool>':
+            match _token.value:
+                case 'true':
+                    inst.value = True
+                
+                case 'false':
+                    inst.value = False
+                
+                case _:
+                    error(f'{_token.value} is not a value.', 3)
+        
+        elif _token.type == '<str>':
+            replace = {
+                r'\n': '\n',
+                r'\t': '\t'
+            }
+
+            for excape, unicode in replace.items():
+                _token.value = _token.value.replace(excape, unicode)
+
+            inst.value = _token.value
+
+        elif _token.type == '<int>':
+            inst.value = hex(int(_token.value))[2:]
+        else:
+            inst.value = _token.value
+
+    return inst
 
 def getItem(name):
     if name in classes.keys():
@@ -67,7 +116,9 @@ def lineInterperet(line):
             name = attributes[0]
             _type =  attributes[1]
 
-            if type(_type[0]) is token:
+            if type(_type) is token:
+                pass
+            elif type(_type[0]) is token:
                 _type = _type[0].value
 
             match _type:
@@ -75,7 +126,7 @@ def lineInterperet(line):
                     classes[name] = getInstanceOf('cFunc')
 
                 case _:
-                    variables[name] = getInstanceOf(_type)
+                    variables[name] = getInstanceOf(_type.value)
 
         case 'define':
             name = attributes[0]
@@ -93,8 +144,8 @@ def lineInterperet(line):
             if c is cFunction:
                 classes[name].code = data
 
-            elif c is Integer:
-                variables[name].value = hex(int(data[0][0].value))
+            elif cFunction in c.__bases__:
+                variables[name].value = getObject(data[0]).value
 
             else:
                 error(f'Tried to define a method of unknown type, {type(classes[name])}', 3)
@@ -114,36 +165,38 @@ def lineInterperet(line):
 
         case 'write':
             to = attributes[0]
-            data = attributes[1]
+            data = attributes[1] # [<data>, <flush>=true]
 
-            match to:
-                case 'console':
-                    if type(data) == str:
-                        sys.stdout.write(data)
+            if len(data) > 1:
+                flush = bool(getObject(data[1]))
+            else:
+                flush = True
 
-                    elif type(data) == token: # oh boy
-                        match data.type:
-                            case '<word>':
-                                lineInterperet(['write', 'console', getItem(data.value)])
-                            case _:
-                                error(f'Expected a printable object when writing to the console, instead got a token of type {data.type} and a value {data.value}', 1)
+            data = data[0]
 
-                    elif type(data) == list:
-                        for item in data:
-                            lineInterperet(['write', 'console', item])
+            to = getItem(to)
 
-                    elif type(data) == Integer:
-                        sys.stdout.write(str(data.__int__()))
+            # Write Data
+            if type(data) == token:
+                match data.type:
+                    case '<word>':
+                        lineInterperet(['write', attributes[0], [getItem(data.value)]])
+                    case _:
+                        to.write(str(getObject(data)))
+                        #error(f'Expected a writable object when writing, instead got a token of type {data.type} and a value {data.value}', 1)
 
-                    elif type(data) == Character:
-                        sys.stdout.write(data.__char__())
+            elif type(data) == list:
+                for item in data:
+                    lineInterperet(['write', attributes[0], [item, Boolean(False)]])
 
-                    else:
-                        print(data)
-                        sleep(10)
+            else:
+                if cFunction in data.__class__.__bases__:
+                    to.write(str(data))
+                else:
+                    error(f'Attempted to write to {type(to)} named {attributes[0]} with type {type(data)}.', 3)
 
-                case _:
-                    pass
+            if flush == True:
+                to.flush()
 
         case 'import':
             file = attributes[0]
@@ -218,7 +271,7 @@ def main():
         ]],
         ['call', 'setup', [None]],
         ['define', 'main', None, [
-            ['write', 'console', "Hello, World!"],
+            ['write', 'console', [String("Hello, World!")]],
         ]],
         ['call', 'main', [None]]
     ]

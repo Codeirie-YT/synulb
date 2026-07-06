@@ -1,0 +1,45 @@
+$setup:
+    `. dropin
+    @animal: cFunc;
+
+    @cat: cFunc;
+    @dog: cFunc;
+;
+
+$main:
+    @garfield: cat;
+    @odie: dog;
+
+    #garfield: "garfield", 10;
+    #odie: "odie", 10;
+;
+
+$animal:
+    -{null}
+    @me.name:;
+    @me.age:;
+;
+
+^cat
+$cat:
+    -{name, age}
+    %animal:;
+    #name: name;
+    #age: age;
+
+    &sound:
+        >console: "Meow!";
+    ;
+;
+
+^dog
+$dog:
+    -{name, age}
+    %animal:;
+    #name: name;
+    #age: age;
+
+    &sound:
+        >console: "Woof!";
+    ;
+;

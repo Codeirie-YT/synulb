@@ -1,0 +1,30 @@
+{
+  "main": "./extension.js",
+  "name": "syn",
+  "displayName": "synulb",
+  "description": "Support for Synulb",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.125.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [{
+      "id": "synulb",
+      "aliases": ["Synulb", "synulb"],
+      "extensions": [".syn"],
+      "configuration": "./language-configuration.json"
+    }],
+    "commands":[{
+      "command": "synulb.run",
+      "title": "Run Synulb"
+    }],
+    "grammars": [{
+      "language": "synulb",
+      "scopeName": "source.synulb",
+      "path": "./syntaxes/synulb.tmLanguage.json"
+    }]
+  }
+}
